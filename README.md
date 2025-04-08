@@ -1,2 +1,2 @@
-# python.task
+# GraphAlgoLib
 Наш проект самый бэст
