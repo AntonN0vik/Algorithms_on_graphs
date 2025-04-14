@@ -16,6 +16,16 @@ class GraphEdgeList(Graph):
     def get_edges_count(self) -> int:
         return len(self._edge_list)
 
+    def get_vertices_list(self) -> list[int]:
+        vertices = set()
+        for edge in self._edge_list:
+            vertices.add(edge[0])
+            vertices.add(edge[1])
+        return list(vertices)
+
+    def get_edges_list(self) -> list[tuple[int, int, int]]:
+        return self._edge_list
+
     def add_edge(self, v: int, u: int, weight=1):
         self._edge_list.append((v, u, weight))
 
@@ -49,5 +59,5 @@ class GraphEdgeList(Graph):
     def __str__(self):
         result = ""
         for edge in self._edge_list:
-            result += str(edge) + '\n'
+            result += f"({edge[0]}, {edge[1]}, weight={edge[2]})\n"
         return result

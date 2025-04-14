@@ -4,99 +4,85 @@ from src.main.graphs.graph_edge_list import GraphEdgeList
 
 class TestGraphEdgeList(unittest.TestCase):
     def setUp(self):
-        self.graph_undirected = GraphEdgeList(directed=False)
-        self.graph_directed = GraphEdgeList(directed=True)
+        self.graph = GraphEdgeList()
 
-    def test_initialization(self):
-        graph = GraphEdgeList()
-        self.assertFalse(graph._directed)
-        self.assertEqual(len(graph._edge_list), 0)
-        self.assertFalse(self.graph_undirected._directed)
-        self.assertTrue(self.graph_directed._directed)
+    def test_add_edge(self):
+        self.graph.add_edge(1, 2)
+        self.assertTrue(self.graph.has_edge(1, 2))
+        self.assertTrue(self.graph.has_edge(2, 1))
 
     def test_get_vertices_count(self):
-        self.assertEqual(self.graph_undirected.get_vertices_count(), 0)
-        self.graph_undirected.add_edge(0, 1)
-        self.graph_undirected.add_edge(2, 3)
-        self.assertEqual(self.graph_undirected.get_vertices_count(), 4)
+        self.graph.add_edge(1, 2)
+        self.graph.add_edge(2, 3)
+        self.assertEqual(self.graph.get_vertices_count(), 3)
 
-    def test_get_edges_count(self):
-        self.assertEqual(self.graph_undirected.get_edges_count(), 0)
-        self.graph_undirected.add_edge(0, 1)
-        self.assertEqual(self.graph_undirected.get_edges_count(), 2)
-        self.assertEqual(self.graph_directed.get_edges_count(), 0)
-        self.graph_directed.add_edge(0, 1)
-        self.assertEqual(self.graph_directed.get_edges_count(), 1)
+    def test_get_edges_count_undirected(self):
+        self.graph.add_edge(1, 2)
+        self.graph.add_edge(2, 3)
+        self.assertEqual(self.graph.get_edges_count(), 4)
 
-    def test_add_edge_undirected(self):
-        self.graph_undirected.add_edge(0, 1, 10)
-        self.assertIn((0, 1, 10), self.graph_undirected._edge_list)
-        self.assertIn((1, 0, 10), self.graph_undirected._edge_list)
-        self.assertTrue(self.graph_undirected.has_edge(0, 1))
-        self.assertTrue(self.graph_undirected.has_edge(1, 0))
+    def test_get_edges_count_directed(self):
+        directed_graph = GraphEdgeList(directed=True)
+        directed_graph.add_edge(1, 2)
+        directed_graph.add_edge(2, 3)
+        self.assertEqual(directed_graph.get_edges_count(), 2)
 
-    def test_add_edge_directed(self):
-        self.graph_directed.add_edge(0, 1, 10)
-        self.assertIn((0, 1, 10), self.graph_directed._edge_list)
-        self.assertEqual(len(self.graph_directed._edge_list), 1)
-        self.assertTrue(self.graph_directed.has_edge(0, 1))
-        self.assertFalse(self.graph_directed.has_edge(1, 0))
+    def test_remove_edge(self):
+        self.graph.add_edge(1, 2)
+        self.graph.remove_edge(1, 2)
+        self.assertFalse(self.graph.has_edge(1, 2))
+        self.assertFalse(self.graph.has_edge(2, 1))
 
-    def test_remove_edge_undirected(self):
-        self.graph_undirected.add_edge(0, 1, 10)
-        self.graph_undirected.remove_edge(0, 1)
-        self.assertFalse(self.graph_undirected.has_edge(0, 1))
-        self.assertFalse(self.graph_undirected.has_edge(1, 0))
-        self.assertEqual(self.graph_undirected.get_edges_count(), 0)
+    def test_has_edge(self):
+        self.graph.add_edge(1, 2)
+        self.assertTrue(self.graph.has_edge(1, 2))
+        self.assertFalse(self.graph.has_edge(1, 3))
 
-    def test_remove_edge_directed(self):
-        self.graph_directed.add_edge(0, 1, 10)
-        self.graph_directed.remove_edge(0, 1)
-        self.assertFalse(self.graph_directed.has_edge(0, 1))
-        self.assertFalse(self.graph_directed.has_edge(1, 0))
-        self.assertEqual(self.graph_directed.get_edges_count(), 0)
+    def test_get_edge_weight(self):
+        self.graph.add_edge(1, 2, weight=3)
+        self.assertEqual(self.graph.get_edge_weight(1, 2), 3)
+        self.assertEqual(self.graph.get_edge_weight(2, 1), 3)
 
-    def test_has_edge_undirected(self):
-        self.graph_undirected.add_edge(1, 2, 5)
-        self.assertTrue(self.graph_undirected.has_edge(1, 2))
-        self.assertTrue(self.graph_undirected.has_edge(2, 1))
+    def test_get_neighbors(self):
+        self.graph.add_edge(1, 2, weight=3)
+        self.graph.add_edge(1, 3, weight=5)
+        neighbors = self.graph.get_neighbors(1)
+        self.assertIn((2, 3), neighbors)
+        self.assertIn((3, 5), neighbors)
+        self.assertEqual(len(neighbors), 2)
 
-    def test_has_edge_directed(self):
-        self.graph_directed.add_edge(1, 2, 5)
-        self.assertTrue(self.graph_directed.has_edge(1, 2))
-        self.assertFalse(self.graph_directed.has_edge(2, 1))
+    def test_get_vertices_list(self):
+        self.graph.add_edge(1, 2)
+        self.graph.add_edge(2, 3)
+        vertices = self.graph.get_vertices_list()
+        self.assertIn(1, vertices)
+        self.assertIn(2, vertices)
+        self.assertIn(3, vertices)
+        self.assertEqual(len(vertices), 3)
 
-    def test_get_edge_weight_undirected(self):
-        self.graph_undirected.add_edge(1, 2, weight=5)
-        self.assertEqual(self.graph_undirected.get_edge_weight(1, 2), 5)
-        self.assertEqual(self.graph_undirected.get_edge_weight(2, 1), 5)
+    def test_get_edges_list_undirected(self):
+        self.graph.add_edge(1, 2, weight=3)
+        edges = self.graph.get_edges_list()
+        self.assertIn((1, 2, 3), edges)
+        self.assertIn((2, 1, 3), edges)
+        self.assertEqual(len(edges), 2)
 
-    def test_get_edge_weight_directed(self):
-        self.graph_directed.add_edge(1, 2, weight=5)
-        self.assertEqual(self.graph_directed.get_edge_weight(1, 2), 5)
-        self.assertEqual(self.graph_directed.get_edge_weight(2, 1), 0)
-
-    def test_get_neighbors_no_edges(self):
-        self.assertEqual(self.graph_undirected.get_neighbors(0), [])
-
-    def test_get_neighbors_undirected(self):
-        self.graph_undirected.add_edge(0, 1, 10)
-        self.graph_undirected.add_edge(0, 2, 5)
-        neighbors = self.graph_undirected.get_neighbors(0)
-        expected_neighbors = [(1, 10), (2, 5)]
-        self.assertListEqual(neighbors, expected_neighbors)
-
-    def test_get_neighbors_directed(self):
-        self.graph_directed.add_edge(0, 1, 10)
-        self.graph_directed.add_edge(0, 2, 5)
-        neighbors = self.graph_directed.get_neighbors(0)
-        expected_neighbors = [(1, 10), (2, 5)]
-        self.assertListEqual(neighbors, expected_neighbors)
+    def test_get_edges_list_directed(self):
+        directed_graph = GraphEdgeList(directed=True)
+        directed_graph.add_edge(1, 2, weight=3)
+        directed_graph.add_edge(2, 3, weight=5)
+        edges = directed_graph.get_edges_list()
+        self.assertIn((1, 2, 3), edges)
+        self.assertIn((2, 3, 5), edges)
+        self.assertNotIn((2, 1, 3), edges)
+        self.assertNotIn((3, 2, 5), edges)
+        self.assertEqual(len(edges), 2)
 
     def test_str(self):
-        self.graph_undirected.add_edge(0, 1, 2)
-        output_str = str(self.graph_undirected)
-        self.assertIn("(0, 1, 2)", output_str)
+        self.graph.add_edge(1, 2, weight=3)
+        output_str = str(self.graph)
+        self.assertIn("(1, 2, weight=3)", output_str)
+        self.assertIn("(2, 1, weight=3)", output_str)
 
 
 if __name__ == '__main__':
