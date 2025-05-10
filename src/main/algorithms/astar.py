@@ -19,7 +19,8 @@ def astar(graph: Graph, start: int, end: int, heuristic):
         if current_vertex == end:
             break
 
-        if current_distance != distances[current_vertex] + heuristic(current_vertex, end):
+        if current_distance != distances[current_vertex] + heuristic(
+                current_vertex, end):
             continue
 
         for neighbor, weight in graph.get_neighbors(current_vertex):
@@ -27,6 +28,7 @@ def astar(graph: Graph, start: int, end: int, heuristic):
             if tentative_distance < distances[neighbor]:
                 distances[neighbor] = tentative_distance
                 previous[neighbor] = current_vertex
-                heapq.heappush(priority_queue, (tentative_distance + heuristic(neighbor, end), neighbor))
+                heapq.heappush(priority_queue, (
+                tentative_distance + heuristic(neighbor, end), neighbor))
 
     return distances, previous

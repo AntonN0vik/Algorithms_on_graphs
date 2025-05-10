@@ -37,9 +37,11 @@ class GraphAdjacencyList(Graph):
 
     def remove_edge(self, v: int, u: int):
         if v in self._adjacency_list:
-            self._adjacency_list[v] = [edge for edge in self._adjacency_list[v] if edge[0] != u]
+            self._adjacency_list[v] = [edge for edge in self._adjacency_list[v]
+                                       if edge[0] != u]
         if not self._directed and u in self._adjacency_list:
-            self._adjacency_list[u] = [edge for edge in self._adjacency_list[u] if edge[0] != v]
+            self._adjacency_list[u] = [edge for edge in self._adjacency_list[u]
+                                       if edge[0] != v]
 
     def has_edge(self, v: int, u: int) -> bool:
         if v not in self._adjacency_list:

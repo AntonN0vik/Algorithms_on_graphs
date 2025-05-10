@@ -33,9 +33,11 @@ class GraphEdgeList(Graph):
             self._edge_list.append((u, v, weight))
 
     def remove_edge(self, v: int, u: int):
-        self._edge_list = [edge for edge in self._edge_list if not (edge[0] == v and edge[1] == u)]
+        self._edge_list = [edge for edge in self._edge_list if
+                           not (edge[0] == v and edge[1] == u)]
         if not self._directed:
-            self._edge_list = [edge for edge in self._edge_list if not (edge[0] == u and edge[1] == v)]
+            self._edge_list = [edge for edge in self._edge_list if
+                               not (edge[0] == u and edge[1] == v)]
 
     def has_edge(self, v: int, u: int) -> bool:
         for edge in self._edge_list:
