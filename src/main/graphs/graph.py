@@ -3,10 +3,6 @@ from abc import ABC, abstractmethod
 
 class Graph(ABC):
     @abstractmethod
-    def __init__(self, directed=False):
-        raise NotImplementedError("Не реализован в подклассе")
-
-    @abstractmethod
     def get_vertices_count(self) -> int:
         raise NotImplementedError("Не реализован в подклассе")
 

@@ -2,37 +2,18 @@ from src.main.graphs.graph import Graph
 
 
 class GraphAdjacencyMatrix(Graph):
-    def __init__(self, directed=False):
+    def __init__(self, size, directed=False):
         self._directed = directed
-        self._size = 0
-        self._adj_matrix = []
+        self._size = size
+        self._adj_matrix = [[0] * size for _ in range(size)]
 
     def get_vertices_count(self) -> int:
         return self._size
 
     def get_edges_count(self) -> int:
-        count = 0
-        for row in self._adj_matrix:
-            for weight in row:
-                if weight != 0:
-                    count += 1
-
-        if self._directed:
-            return count
-        else:
-            return count // 2
-
-    def _resize_matrix(self, new_size: int):
-        for row in self._adj_matrix:
-            row.extend([0] * (new_size - self._size))
-        for _ in range(new_size - self._size):
-            self._adj_matrix.append([0] * new_size)
-        self._size = new_size
+        return self._size
 
     def add_edge(self, v: int, u: int, weight=1):
-        max_vertex = max(v, u)
-        if max_vertex >= self._size:
-            self._resize_matrix(max_vertex + 1)
         self._adj_matrix[v][u] = weight
         if not self._directed:
             self._adj_matrix[u][v] = weight

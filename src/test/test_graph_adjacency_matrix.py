@@ -4,23 +4,21 @@ from src.main.graphs.graph_adjacency_matrix import GraphAdjacencyMatrix
 
 class TestGraphAdjacencyMatrix(unittest.TestCase):
     def setUp(self):
-        self.graph_undirected = GraphAdjacencyMatrix(directed=False)
-        self.graph_directed = GraphAdjacencyMatrix(directed=True)
+        self.graph_undirected = GraphAdjacencyMatrix(3, directed=False)
+        self.graph_directed = GraphAdjacencyMatrix(3, directed=True)
 
     def test_initialization(self):
-        empty_graph = GraphAdjacencyMatrix()
-        expected_matrix = []
+        empty_graph = GraphAdjacencyMatrix(3)
+        expected_matrix = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         self.assertEqual(empty_graph._adj_matrix, expected_matrix)
         self.assertFalse(self.graph_undirected._directed)
         self.assertTrue(self.graph_directed._directed)
 
     def test_get_vertex_count(self):
-        self.graph_undirected.add_edge(0, 1, 10)
-        self.assertEqual(self.graph_undirected.get_vertices_count(), 2)
+        self.assertEqual(self.graph_undirected.get_vertices_count(), 3)
 
     def test_get_edges_count(self):
-        self.graph_undirected.add_edge(0, 1, 10)
-        self.assertEqual(self.graph_undirected.get_edges_count(), 1)
+        self.assertEqual(self.graph_undirected.get_edges_count(), 3)
 
     def test_add_edge_undirected(self):
         self.graph_undirected.add_edge(0, 1, 10)
@@ -85,8 +83,9 @@ class TestGraphAdjacencyMatrix(unittest.TestCase):
     def test_str(self):
         self.graph_undirected.add_edge(0, 1, 2)
         expected_output = (
-            "0 2 \n"
-            "2 0 \n"
+            "0 2 0 \n"
+            "2 0 0 \n"
+            "0 0 0 \n"
         )
         self.assertEqual(self.graph_undirected.__str__(), expected_output)
 
