@@ -56,9 +56,10 @@ class GraphVisualization(Scene):
         self.wait(3)
 
     def visualize_start_and_end(self, manim_graph):
-        self.play(manim_graph[self.start].animate.set_fill(ORANGE), run_time=1)
-        self.play(manim_graph[self.end].animate.set_fill(RED), run_time=1)
-
+        self.play(manim_graph[self.start].animate.set_fill(ORANGE),
+                  run_time=1)
+        self.play(manim_graph[self.end].animate.set_fill(RED),
+                  run_time=1)
 
     def visualize_algorithm(self, manim_graph, start, end):
         distances, previous = dijkstra(self.graph, start)
@@ -76,6 +77,7 @@ class GraphVisualization(Scene):
                 self.play(edge.animate.set_color(YELLOW), run_time=1)
 
         self.play(FadeOut(title))
+
 
 def create_video(graph, representation_type, start_vertex, end_vertex):
     scene = GraphVisualization(
